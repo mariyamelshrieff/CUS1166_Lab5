@@ -30,11 +30,11 @@ def add_flight():
     duration = request.form.get("duration")
     # Equivalent to:
     # INSERT INTO flights (flight_number, origin, destination, durations) VALUES (origin,...)
-    flight = Flight(flight_number="LH",origin=origin, destination=destination, duration=duration
-        db.session.add(flight)
-        db.session.commit()
+    flight = Flight(flight_number="LH",origin=origin, destination=destination, duration=duration)
+    db.session.add(flight)
+    db.session.commit()
     # Query database.
-        flights = Flight.query.all()
+    flights = Flight.query.all()
     return render_template('index.html', flights=flights)
 @app.route("/book/<int:flight_id>", methods=["GET", "POST"])
 def book_flight(flight_id):
@@ -49,8 +49,8 @@ def book_flight(flight_id):
         flight.add_passenger(name,seat)
 # Use the relationships field in the flights model to retrieve
 # all passengers in the current flight.
-passengers = flight.passengers
-return render_template("book.html", flight=flight, passengers=passengers)
+    passengers = flight.passengers
+    return render_template("book.html", flight=flight, passengers=passengers)
 
 def main():
     if (len(sys.argv)==2):
@@ -58,7 +58,7 @@ def main():
         if sys.argv[1] == 'createdb':
             db.create_all()
     else:
-        print("Run app using 'flask run'"
+        print("Run app using 'flask run'")
         print("To create a database use 'python app.py createdb")
 # Run the main method in the context of our flass application
 # This allows db know about our models.
