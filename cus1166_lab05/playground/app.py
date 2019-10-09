@@ -2,13 +2,15 @@
 import sys
 from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
+from models import Course
+from models import db
 
 # This module defines that database parameters.
 from config import Config
 
 # Load the models (i.e. Flights, Passenger model classes)
-from models import *
 
+i = 0
 
 # Define an instance of flask application, load database parameters.
 app = Flask(__name__)
@@ -22,8 +24,10 @@ db.init_app(app)
 def index():
     # Equivalent to: "SELECT * from flights" SQL statement.
     Course = Course.query.all()
-    return render_template('index.html', Course = Course)
-@app.route("/add_course",methods=["post"])
+    return render_template('index.html', courses = courses)
+
+@app.route("/add_course",methods=['POST'])
+
 def add_course():
     # Get information from the form.
     id = request.form.get("id")
@@ -51,7 +55,7 @@ def register_student(Course_id):
 # Use the relationships field in the flights model to retrieve
 # all passengers in the current flight.
 passengers = flight.passengers
-return render_template("book.html", flight=flight, passengers=passengers)
+return render_template("course_details.html", flight=flight, passengers=passengers)
 
 def main():
     if (len(sys.argv)==2):
