@@ -1,11 +1,15 @@
+{% extends "layout.html" %}
 <html>
-  <body>
+<head>
+<title>Welcome To The Course </title> </head>
+  <body> {% block content %}
     <form action='/add_course' method='post'>
       Name of classes to add:<br>
       <input name="course_title" type="text"><br>
       Course id to add:<br>
       <input name="course_id" type="text"><br>
       <input type="submit" value="Submit">
+        {% endblock %}
     </form>
 
   <ul>
