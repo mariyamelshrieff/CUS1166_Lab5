@@ -2,15 +2,12 @@
 import sys
 from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
-from models import Course
-from models import db
-
-# This module defines that database parameters.
+#This module defines that database parameters.
 from config import Config
+#Load the models (i.e. Flights, Passenger model classes)
+from models import *
 
 # Load the models (i.e. Flights, Passenger model classes)
-
-i = 0
 
 # Define an instance of flask application, load database parameters.
 app = Flask(__name__)
@@ -31,16 +28,22 @@ def index():
 def add_course():
     # Get information from the form.
     id = request.form.get("id")
-    Course_number = request.form.get("Course Number")
-    Course_title = request.form.get("Course Title")
+    Course_number = request.form.get("Course_Number")
+    Course_title = request.form.get("Course_Title")
     # Equivalent to:
     # INSERT INTO flights (flight_number, origin, destination, durations) VALUES (origin,...)
-    course = Course(Course_number="LH",Course_number = Course_number, id = id , Course_title = Course_title)
-        db.session.add(course)
+    new_course = Course(Course_number = Course_number, Course_title = Course_title)
+        db.session.add(new_course)
         db.session.commit()
     # Query database.
         courses = course.query.all()
     return render_template('index.html', courses=courses)
+
+@app.route('/course_details/<int:course_id>')
+def course_students(course_id):
+    students = student.query.all()
+    return render_template("course_details.html", students=students, course_id=course_id)
+
 @app.route("/register_student/<int:Course_id>", methods=["GET", "POST"])
 def register_student(Course_id):
     #
@@ -48,14 +51,13 @@ def register_student(Course_id):
     course = course.query.get(Course_id)
     # If this is a post request = Add the passenger.
     if request.method == 'POST':
-        name = request.form.get("name")
-        seat = request.form.get("seat")
-        # Use the utility method to add a new passenger in the database.
-        flight.add_passenger(name,seat)
-# Use the relationships field in the flights model to retrieve
-# all passengers in the current flight.
-passengers = flight.passengers
-return render_template("course_details.html", flight=flight, passengers=passengers)
+        course_number = request.form.get("student_name")
+        course_title = request.form.get("student_grade")
+        new_Student= student(name=course_number,grade=course_title, course_id=Course_id)
+        db.session.add(new_student)
+        db.session.commit()
+        Students = student.query.all ()
+return render_template("course_details.html", students= students, Course_id = Course_id)
 
 def main():
     if (len(sys.argv)==2):
@@ -63,7 +65,7 @@ def main():
         if sys.argv[1] == 'createdb':
             db.create_all()
     else:
-        print("Run app using 'flask run'"
+        print("Run app using 'flask run'")
         print("To create a database use 'python app.py createdb")
 # Run the main method in the context of our flass application
 # This allows db know about our models.

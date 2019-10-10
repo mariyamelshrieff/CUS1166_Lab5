@@ -12,21 +12,20 @@ Course_number = db.Column(db.String, nullable = False)
 Course_title = db.Column(db.String, nullable = False)
 
 # Specify any relationship fields.
-RegisteredStudent = db.relationship("RegisteredStudent", backref="Course", lazy=True)
+RegisteredStudent = db.relationship("Student", backref="Course", lazy=True)
 
 # specify any utility methods associated with the model.
-def add_Student(self,name,level):
+def add_Student(self,name,grade):
     # Notice that we set the foreign key for the passenger class.
-    new_Student = Student(name=name, level=level, Course_id=self.id )
+    new_Student = Student(name=name, grade=grade, Course_id=self.id )
     db.session.add(new_Student)
     db.session.commit()
 
 #Define a Passenger model.
-class RegisteredStudent(db.Model):
-    __tablename__ = "RegisteredStudent"
-    id = db.Column(db.String, primary_key=True)
-    First_name = db.Column(db.String, nullable = False)
-    Last_name = db.Column(db.String, nullable = False)
-    grade = db.Column(db.String, nullable=False)
+class student(db.Model):
+    __tablename__ = "student"
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, nullable = False)
+    grade = db.Column(db.Integer, nullable=True)
     # Notice, this field serves as a foreighKey.
-    Course_id = db.Column(db.String, db.ForeignKey('Course.id'), nullable=False)
+    Course_id = db.Column(db.Integer, db.ForeignKey('course.course.id'), nullable=False)
